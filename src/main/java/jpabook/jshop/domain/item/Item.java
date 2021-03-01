@@ -1,11 +1,15 @@
 package jpabook.jshop.domain.item;
 
+import jpabook.jshop.exception.NotEnoughStockException;
 import jpabook.jshop.domain.Category;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="dtype")
@@ -23,43 +27,27 @@ public abstract class Item {
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
 
-    public Long getId() {
-        return this.id;
+    // 비즈니스 로직
+
+    /**
+     * stock 증가
+     * @param quantity
+     */
+    public void addStock(int quantity){
+        this.stockQuantity += quantity;
     }
 
-    public String getName() {
-        return this.name;
+    /**
+     * stock 감소
+     * @param quantity
+     */
+    public void removeStock(int quantity){
+        int restStock = this.stockQuantity - quantity;
+        if(restStock < 0){
+            throw new NotEnoughStockException("need more stock");
+        }
+
+        this.stockQuantity = restStock;
     }
 
-    public int getPrice() {
-        return this.price;
-    }
-
-    public int getStockQuantity() {
-        return this.stockQuantity;
-    }
-
-    public List<Category> getCategories() {
-        return this.categories;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
-    }
 }
