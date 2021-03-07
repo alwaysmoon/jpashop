@@ -1,8 +1,10 @@
 package jpabook.jshop.repository;
 
+import jpabook.jshop.domain.item.Book;
 import jpabook.jshop.domain.item.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
