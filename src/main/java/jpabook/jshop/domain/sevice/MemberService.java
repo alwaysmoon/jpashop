@@ -54,4 +54,15 @@ public class MemberService {
     public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
+
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+
+        // member 를 변환하명 영속상태 끊긴 member 가 조회되어 반환됨
+        // 업데이트와 조회 둘 다 이루어짐
+    }
+
+
 }
